@@ -19,17 +19,23 @@ public class User {
 
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Todo> todoList = new ArrayList<>();
 
     public void addTodos(Todo... todos) {
-        todoList.addAll(Arrays.asList(todos));
+        Arrays.stream(todos).forEach((todo) -> {
+            todo.setUser(this);
+            todoList.add(todo);
+        });
     }
 
     public void removeTodo(Todo... todos) {
         Arrays.asList(todos).forEach((todo) -> {
             if (!todoList.contains(todo)) throw new IllegalArgumentException();
-            else todoList.remove(todo);
+            else {
+                todoList.remove(todo);
+                todo.setUser(null);
+            }
         });
     }
 }
