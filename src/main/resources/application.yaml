@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: TodoApplication
+
+  mvc:
+    view:
+      suffix: .jsp
+      prefix: templates/pages/
