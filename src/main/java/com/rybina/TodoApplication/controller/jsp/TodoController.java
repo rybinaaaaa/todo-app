@@ -14,7 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -61,7 +64,7 @@ public class TodoController {
                     model.addAttribute("todoRead", todoReadEditDto);
                     return "todo";
                 })
-                .orElse("redirect:users/login");
+                .orElse("redirect:/users/login");
     }
 
     @GetMapping("/add")
@@ -69,7 +72,7 @@ public class TodoController {
         return "create_todo";
     }
 
-    @GetMapping("{id}/edit")
+    @GetMapping("/{id}/edit")
     public String editTodoForm(@PathVariable Integer id, Model model) {
         return todoService.findById(id).map(todo -> {
             TodoReadEditDto todoReadEditDto = todoDtoMapper.mapToReadDto(todo);
@@ -80,9 +83,15 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public String editTodoForm(@PathVariable("id") Integer id, @ModelAttribute("todoRead") TodoReadEditDto todoDto) throws NotSavedException {
+    public String editTodoForm(@PathVariable("id") Integer id, @Validated @ModelAttribute("todoRead") TodoReadEditDto todoDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         Todo todo = todoService.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("todoRead", todoDto);
+            return "edit_todo";
+        }
+
         todo = todoDtoMapper.copyFromReadEditDto(todoDto, todo);
 
         try {
@@ -94,16 +103,21 @@ public class TodoController {
     }
 
     @PostMapping
-    public String addTodo(@ModelAttribute("user") UserReadDto userReadDto,@ModelAttribute("todoCreate") TodoCreateDto todoDto, Model model) {
+    public String addTodo(@ModelAttribute("user") UserReadDto userReadDto, @Validated @ModelAttribute("todoCreate") TodoCreateDto todoDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         Todo todo = todoDtoMapper.mapFromCreateDto(todoDto, userReadDto.getId());
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("todoCreate", todoDto);
+            return "create_todo";
+        }
 
         try {
             Todo savedTodo = todoService.save(todo);
             return "redirect:/todos/" + savedTodo.getId();
         } catch (NotSavedException e) {
             model.addAttribute("error", "Task could not be saved. Please try again.");
-            return "create_todo";
+            return "redirect:/error";
         }
     }
 

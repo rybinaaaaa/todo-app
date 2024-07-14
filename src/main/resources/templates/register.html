@@ -13,11 +13,17 @@
 <form th:action="@{/users/register}" th:object="${userCreate}" style="width: 250px" method="post"
       class="position-absolute top-50 start-50 translate-middle">
     <label for="email" style="display: block">Email:</label>
-    <input id="email" name="email" th:value="*{email}" type="text" class="mb-2"/>
+    <input id="email" name="email" th:value="*{email}" type="email" class="mb-2"/>
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+
     <label for="username" style="display: block">Username:</label>
     <input name="username" id="username" th:value="*{username}" type="text" class="mb-2"/>
+    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></div>
+
     <label for="password" style="display: block"> Password: </label>
-    <input id="password" name="password" th:value="*{password}" type="text" class="mb-2"/>
+    <input id="password" name="password" th:value="*{password}" type="password" class="mb-2"/>
+    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
+
     <button type="submit" class="btn btn-dark mt-2 mb-2">Register!</button>
 </form>
 <script th:replace="fragments::bootstrapJs"></script>

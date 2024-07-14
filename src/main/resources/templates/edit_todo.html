@@ -15,15 +15,18 @@
             <form th:action="@{|/todos/${todoRead.id}|}" th:object="${todoRead}" th:method="put">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="title" th:field="*{title}">
+                    <input type="text" class="form-control" id="title" th:field="*{title}" th:value="*{title}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" rows="3" th:field="*{description}"></textarea>
+                    <textarea class="form-control" id="description" rows="3" th:field="*{description}" th:value="*{description}"></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="targetDate" class="form-label">Target Date</label>
-                    <input type="date" class="form-control" id="targetDate" th:field="*{targetDate}">
+                    <input type="date" class="form-control" id="targetDate" th:field="*{targetDate}" th:value="*{targetDate}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('targetDate')}" th:errors="*{targetDate}"></div>
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="isDone" th:field="*{isDone}">

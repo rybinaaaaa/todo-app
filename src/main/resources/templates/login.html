@@ -10,11 +10,15 @@
 </head>
 <body>
 <h1 class="mt-5 text-center">Login User or <a th:href="@{/users/register}">register</a></h1>
-<form th:action="@{/users/login}" th:object="${userCredentials}" style="width: 250px" method="post" class="position-absolute top-50 start-50 translate-middle">
+<p th:if="${loginError}" class="mt-5 text-center text-danger">Incorrect Credentials!</p>
+<form th:action="@{/users/login}" th:object="${userCredentials}" style="width: 250px" method="post"
+      class="position-absolute top-50 start-50 translate-middle">
     <label for="username">Username:</label>
     <input name="username" id="username" th:value="*{username}" type="text" class="mb-2"/>
-    <label  for="password"> Password: </label>
-    <input id="password" name="password" th:value="*{password}" type="text" class="mb-2" />
+    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></div>
+    <label for="password"> Password: </label>
+    <input id="password" name="password" type="password" class="mb-2"/>
+    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
     <button type="submit" class="btn btn-dark mt-2 mb-2">Login!</button>
 </form>
 <script th:replace="fragments::bootstrapJs"></script>

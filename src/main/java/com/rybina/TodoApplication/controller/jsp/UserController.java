@@ -11,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -31,8 +34,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("userCreate") UserCreateDto userCreateDto, Model model) {
+    public String register(@Validated @ModelAttribute("userCreate") UserCreateDto userCreateDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         try {
+            if (bindingResult.hasErrors()) {
+                redirectAttributes.addFlashAttribute("userCreate", userCreateDto);
+                return "register";
+            }
+
             User user = userDtoMapper.fromCreateDto(userCreateDto);
             user = userService.save(user);
             UserReadDto userReadDto = userDtoMapper.toReadDto(user);
@@ -41,7 +49,7 @@ public class UserController {
 
             return "redirect:/todos";
         } catch (NotSavedException e) {
-            return "register";
+            return "redirect:/error";
         }
     }
 
@@ -51,19 +59,24 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("userCredentials") UserCredentials userCredentials, Model model) {
-        try {
-            User user = userService.findByUsernameAndPassword(userCredentials.getUsername(), userCredentials.getPassword());
+    public String login(@Validated @ModelAttribute("userCredentials") UserCredentials userCredentials, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userCredentials", userCredentials);
+            return "login";
+        }
+
+        return userService.findByUsernameAndPassword(userCredentials.getUsername(), userCredentials.getPassword()).map(user -> {
             UserReadDto userReadDto = userDtoMapper.toReadDto(user);
             model.addAttribute("user", userReadDto);
 
-            log.info("{} has been logged", userReadDto);
+            log.info("{} has been logged in", userReadDto.getUsername());
+
             return "redirect:/todos";
-        } catch (IllegalArgumentException e) {
-            log.error("Error due logging user");
-            model.addAttribute("error", "Invalid username or password");
-            return "login";
-        }
+        }).orElseGet(() -> {
+            redirectAttributes.addFlashAttribute("userCredentials", userCredentials);
+            redirectAttributes.addFlashAttribute("loginError", true);
+            return "redirect:/users/login";
+        });
     }
 
     @GetMapping("/exit")

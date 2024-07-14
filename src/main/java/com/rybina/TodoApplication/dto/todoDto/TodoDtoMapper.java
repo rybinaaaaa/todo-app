@@ -21,10 +21,6 @@ public class TodoDtoMapper {
         todoReadEditDto.setTargetDate(todo.getTargetDate());
         todoReadEditDto.setIsDone(todo.getIsDone());
 
-        Optional.ofNullable(todo.getUser()).ifPresent((user) -> {
-            todoReadEditDto.setUserId(user.getId());
-        });
-
         return todoReadEditDto;
     }
 

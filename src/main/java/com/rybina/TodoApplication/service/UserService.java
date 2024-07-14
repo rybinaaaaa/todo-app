@@ -33,9 +33,12 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User findByUsernameAndPassword(String username, String password) {
-        return userRepository.findByUsernameAndPassword(username, password)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+    public Optional<User> findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public Page<User> findAll(Pageable pageable) {
