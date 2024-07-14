@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Details</title>
+    <link th:replace="fragments::bootstrapHeader">
+</head>
+<body>
+<div th:replace="fragments::header"></div>
+<div class="container mt-5">
+    <div class="card">
+        <h5 class="card-header">Todo Details</h5>
+        <div class="card-body">
+            <h5 class="card-title" th:text="|Title: ${todoRead.title}|"></h5>
+            <p class="card-text" th:text="|Description: ${todoRead.description}|"></p>
+            <p class="card-text"><small class="text-muted" th:text="${todoRead.targetDate}"></small></p>
+            <p class="card-text">
+                <span th:if="${todoRead.isDone}" class="text-success">Completed</span>
+                <span th:unless="${todoRead.isDone}" class="text-warning">Uncompleted!</span>
+            </p>
+            <a th:href="@{/todos}" class="btn btn-primary">Back to Todos</a>
+        </div>
+    </div>
+</div>
+<script th:replace="fragments::bootstrapJs"></script>
+</body>
+</html>

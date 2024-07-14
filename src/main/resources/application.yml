@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: TodoApplication
+  datasource:
+    driver-class-name: org.h2.Driver
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

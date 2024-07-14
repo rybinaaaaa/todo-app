@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link th:replace="fragments::bootstrapHeader">
+</head>
+<body>
+<link th:replace="fragments::header">
+<div class="container mt-5">
+    <div class="card">
+        <h5 class="card-header" th:text="|Hello, ${user.username}|"></h5>
+        <div class="card-body">
+            <h5 class="card-title" th:text="|Username: ${user.username}|"></h5> <!-- Отображаем имя пользователя -->
+            <p class="card-text" th:text="|Email: ${user.email}|"></p> <!-- Отображаем email пользователя -->
+            <a th:href="@{|/users/${user.id}/edit|}" class="btn btn-primary">Edit User</a> <!-- Ссылка на страницу редактирования -->
+        </div>
+    </div>
+</div>
+<script th:replace="fragments::bootstrapJs"></script> <!-- Подключаем скрипты Bootstrap -->
+</body>
+</html>

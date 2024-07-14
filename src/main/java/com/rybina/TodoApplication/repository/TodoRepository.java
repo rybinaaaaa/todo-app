@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Integer> {
 
-    Page<Todo> findAllUserId(Integer userId);
     Page<Todo> findAll(Pageable pageable);
+
+    Page<Todo> findByUserId(Integer userId, Pageable pageable);
 }

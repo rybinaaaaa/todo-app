@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:replace="fragments::bootstrapHeader">
+    <title>Document</title>
+</head>
+<body>
+<h1 class="mt-5 text-center">Login User or <a th:href="@{/users/register}">register</a></h1>
+<form th:action="@{/users/login}" th:object="${userCredentials}" style="width: 250px" method="post" class="position-absolute top-50 start-50 translate-middle">
+    <label for="username">Username:</label>
+    <input name="username" id="username" th:value="*{username}" type="text" class="mb-2"/>
+    <label  for="password"> Password: </label>
+    <input id="password" name="password" th:value="*{password}" type="text" class="mb-2" />
+    <button type="submit" class="btn btn-dark mt-2 mb-2">Login!</button>
+</form>
+<script th:replace="fragments::bootstrapJs"></script>
+</body>
+</html>

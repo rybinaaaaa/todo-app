@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Adding Task</title>
+    <link th:replace="fragments::bootstrapHeader">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4">Adding Task</h1>
+            <form th:if="${session.user}" th:action="@{/todos}" th:object="${todoCreate}" method="post">
+                <div class="form-group mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input id="title" name="title" th:value="*{title}" type="text" class="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input name="description" id="description" th:value="*{description}" type="text" class="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="targetDate" class="form-label">Target Date</label>
+                    <input id="targetDate" name="targetDate" th:value="*{targetDate}" type="date" class="form-control"/>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark mt-3">Add Task!</button>
+                </div>
+            </form>
+            <div class="text-center mt-4">
+                <a th:href="@{/todos}" class="btn btn-secondary">Go back!</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:replace="fragments::bootstrapJs"></script>
+</body>
+</html>
